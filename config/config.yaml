@@ -1,0 +1,9 @@
+kubernetes:
+  excluded_namespaces:
+    - argocd
+  included_namespaces:
+    - default
+
+external_services:
+  aws_secrets_manager:
+    config: yeah

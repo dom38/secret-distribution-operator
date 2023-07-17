@@ -1,3 +1,4 @@
 TODO:
 
-- write python script to do patch and debug it (instead of running the operator)
+- generate clients from config on startup
+- abstract away secret gen from handler
