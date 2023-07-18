@@ -15,7 +15,7 @@ jobs:
         fetch-depth: 0
         projectBaseDir: src
         args: >
-          -Dsonar.python.version=3.7, 3.8, 3.9
+          -Dsonar.python.version=3.11
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
