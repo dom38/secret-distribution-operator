@@ -16,6 +16,8 @@ jobs:
         projectBaseDir: src
         args: >
           -Dsonar.python.version=3.7, 3.8, 3.9
+          -Dsonar.projectKey=dom38_secret-distribution-operator
+          -Dsonar.organization=dom38
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
