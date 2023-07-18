@@ -6,6 +6,7 @@ import kopf
 from providers import aws_secrets_manager
 from config import ConfigLoader
 
+
 def namespace_inclusion(namespace, memo: kopf.Memo, **_):
     """
     Conditional checks for namespace
@@ -21,12 +22,13 @@ def namespace_inclusion(namespace, memo: kopf.Memo, **_):
 
 
 def get_annotation(
-    annotations,
-    **_):
+        annotations,
+        **_):
     """
     Conditional check for annotation
     """
     return annotations.get('dom.dev/distribute') == 'true'
+
 
 @kopf.on.startup()
 def start_background_worker(memo: kopf.Memo, logger, **_):
@@ -37,6 +39,7 @@ def start_background_worker(memo: kopf.Memo, logger, **_):
     config_loader = ConfigLoader()
     memo.global_config = config_loader.load_config()
     logger.info(f"Config Loaded: {memo.global_config}")
+
 
 @kopf.on.create('secret',
                 when=kopf.any_([
@@ -54,6 +57,7 @@ def create_fn(memo: kopf.Memo, name, body, logger, **_):
     logger.info(f"Result: {result}")
     logger.info(f"Secret: {body}")
 
+
 @kopf.on.update('secret',
                 when=kopf.any_([
                     namespace_inclusion,
@@ -69,6 +73,7 @@ def update_fn(memo: kopf.Memo, name, body, logger, **_):
     logger.info(f"Config: {memo.global_config}")
     logger.info(f"Result: {result}")
     logger.info(f"Secret: {body}")
+
 
 @kopf.timer('secret',
             when=kopf.any_([

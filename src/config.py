@@ -4,6 +4,7 @@ Provides a global config object
 
 import yaml
 
+
 class ConfigLoader:
     """
     A singleton class to load config from a file on startup.
