@@ -1,7 +1,14 @@
+"""
+Module to create param store client
+"""
+
 import boto3
 from config import load_config
 
 class ParameterStoreClient:
+    """
+    Creates a singelton param store client 
+    """
     _instance = None
 
     def __new__(cls):
@@ -12,8 +19,13 @@ class ParameterStoreClient:
 
     @staticmethod
     def create_client():
+        """
+        Conditionally creates client depending on config
+        """
         config = load_config()
+        client = ""
         if config["external_services"]["aws_parameter_store"]["enabled"]:
-            return boto3.client('ssm')
+            client = boto3.client('ssm')
         else:
-            return None
+            client = None
+        return client

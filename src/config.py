@@ -2,6 +2,7 @@ import yaml
 
 CONFIG = None
 
+
 def load_config():
     global CONFIG
     if CONFIG is None:

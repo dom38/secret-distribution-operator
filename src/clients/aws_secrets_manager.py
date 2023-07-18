@@ -1,7 +1,15 @@
+"""
+Module to create secrets manager client
+"""
+
 import boto3
 from config import load_config
 
 class SecretsManagerClient:
+    """
+    Creates a singelton secrets manager client 
+    """
+
     _instance = None
 
     def __new__(cls):
@@ -12,8 +20,13 @@ class SecretsManagerClient:
 
     @staticmethod
     def create_client():
+        """
+        Conditionally creates client depending on config
+        """
         config = load_config()
+        client = ""
         if config["external_services"]["aws_secrets_manager"]["enabled"]:
-            return boto3.client('secretsmanager')
+            client = boto3.client('secretsmanager')
         else:
-            return None
+            client = None
+        return client
