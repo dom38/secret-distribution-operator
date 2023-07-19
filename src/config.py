@@ -23,6 +23,6 @@ class ConfigLoader:
         Loads config from a file or memory.
         """
         if cls._config is None:
-            with open('config.yaml', 'r', encoding="utf-8") as file:
+            with open('config/config.yaml', 'r', encoding="utf-8") as file:
                 cls._config = yaml.safe_load(file)
         return dict(cls._config)

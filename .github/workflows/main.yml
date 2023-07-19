@@ -6,16 +6,29 @@ on:
     branches:
     - main
 jobs:
-  sonarcloud:
+  lint:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
     steps:
     - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
       with:
-        # Disabling shallow clone is recommended for improving relevancy of reporting
-        fetch-depth: 0
-        projectBaseDir: src
-        args: >
-          -Dsonar.python.version=3.11
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint
+        pip install pytest
+        pip install -r requirements.txt
+    - name: Analysing the code with pylint
+      run: |
+        pylint $(git ls-files '*.py')
+    - name: Test with coverage
+      run: |
+        pytest --cov-report xml --cov=src tests/
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
