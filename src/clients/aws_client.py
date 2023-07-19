@@ -3,7 +3,7 @@ Module to create secrets manager client
 """
 
 import boto3
-from config import ConfigLoader
+from src.config import ConfigLoader
 
 class ExternalServiceClient:
     """

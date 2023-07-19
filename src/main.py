@@ -3,8 +3,8 @@ Main operator logic
 """
 
 import kopf
-from providers import aws_secrets_manager
-from config import ConfigLoader
+from src.providers import aws_secrets_manager
+from src.config import ConfigLoader
 
 
 def namespace_inclusion(namespace, memo: kopf.Memo, **_):
