@@ -106,3 +106,31 @@ class ExternalServiceClientTestCase(unittest.TestCase):
 
             self.assertIsNone(client)
             mock_boto3_client.assert_not_called()
+
+    def test_create_client_first_instance(self):
+        """
+        Test client is created when no client exists
+        """
+        config = {
+            "external_services": {
+                "aws_parameter_store": {
+                    "enabled": True
+                }
+            }
+        }
+        client_type = "ssm"
+
+        with patch("src.clients.aws_client.ConfigLoader") as mock_config_loader, \
+             patch("src.clients.aws_client.boto3.client") as mock_boto3_client:
+
+            mock_config_loader.return_value.load_config.return_value = config
+            mock_boto3_client.return_value = MagicMock()
+            ExternalServiceClient._instance = None
+            client = ExternalServiceClient(client_type)
+
+            self.assertIsNotNone(client)
+            self.assertIsNotNone(ExternalServiceClient._instance)
+            self.assertIsInstance(client, ExternalServiceClient)
+            self.assertEqual(client, ExternalServiceClient._instance)
+
+            mock_boto3_client.assert_called_once_with('ssm')
