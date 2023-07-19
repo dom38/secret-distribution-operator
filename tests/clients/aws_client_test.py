@@ -1,3 +1,5 @@
+# pylint: disable=protected-access
+
 """
 test src/clients/aws_client.py
 """
