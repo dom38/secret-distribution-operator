@@ -5,6 +5,7 @@ Main operator logic
 import kopf
 from src.providers import aws_secrets_manager
 from src.config import ConfigLoader
+from src.utils import reconciliation
 
 
 def namespace_inclusion(namespace, memo: kopf.Memo, **_):
@@ -81,10 +82,20 @@ def update_fn(memo: kopf.Memo, name, body, logger, **_):
                 get_annotation,
             ]),
             interval=60,
-            initial_delay=30)
-def check_fn(logger, **_):
+            initial_delay=30,
+            idle=60)
+def check_fn(name, logger, **_):
     """
     Reconcile secrets in cluster
     Only if namespace is whitelisted and/or annotation is present
     """
     logger.info("Starting Reconciliation")
+    should_reconcile = aws_secrets_manager.check_secret(
+        client=None, secret_name=name)
+    if isinstance(should_reconcile) is int:
+        logger.info(
+            reconciliation.reconcile_secret(
+                secret_name=name,
+                age=should_reconcile))
+    else:
+        logger.error(should_reconcile)
