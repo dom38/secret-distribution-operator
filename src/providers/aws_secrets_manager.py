@@ -2,6 +2,9 @@
 Mock module
 """
 
+import boto3
+import botocore
+
 def create_secret(secret_name):
     """
     Mock Function
@@ -14,11 +17,19 @@ def update_secret(secret_name):
     """
     return f"{secret_name} secret updated"
 
-def check_secret():
+def check_secret(client: boto3.client, secret_name: str):
     """
-    Mock Function
+    Checks to see if the last updated time on a secret is older than 60 seconds
     """
-    return True
+    outcome = ""
+    try:
+        response = client.describe_secret(SecretId=secret_name)
+        return response['LastChangedDate']
+    except botocore.exceptions.ClientError as error :
+        outcome = f"Error: {error}"
+
+    return outcome
+
 
 def create_client():
     """
