@@ -19,6 +19,7 @@ def mock_open(config_content):
     finally:
         pass
 
+
 @pytest.fixture
 def mock_open_config(monkeypatch):
     """
